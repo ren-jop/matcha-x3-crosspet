@@ -77,8 +77,8 @@ class HomeActivity final : public Activity {
         return static_cast<int>(HomeTab::Library);
       case HomeMenuItem::FILE_TRANSFER:
         return static_cast<int>(HomeTab::Transfer);
-      case HomeMenuItem::READING_STATS:
-        return static_cast<int>(HomeTab::Stats);
+      case HomeMenuItem::GAMES:
+        return static_cast<int>(HomeTab::Home);
       case HomeMenuItem::SETTINGS_MENU:
         return static_cast<int>(HomeTab::Settings);
       default:
