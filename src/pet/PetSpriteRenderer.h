@@ -40,11 +40,10 @@ class PetSpriteRenderer {
 
   static const char* stageName(PetStage stage);
   static const char* moodName(PetMood mood);
-  static char stageInitial(PetStage stage);
 
   // Attempt to load sprite into spriteBuffer. Returns bytes read (0 on fail).
   static size_t loadSprite(const char* path, size_t expectedBytes);
 
-  static void drawFallback(GfxRenderer& renderer, int x, int y, int scale, PetStage stage, uint8_t variant = 0,
+  static void drawFallback(const GfxRenderer& renderer, int x, int y, int scale, PetStage stage, uint8_t variant = 0,
                            uint8_t petType = 0, uint8_t animFrame = 0);
 };

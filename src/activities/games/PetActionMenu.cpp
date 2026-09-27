@@ -14,7 +14,7 @@ PetAction PetActionMenu::getSelected() const { return static_cast<PetAction>(sel
 
 // ---- Action availability guards -----------------------------------------
 
-bool PetActionMenu::isActionAvailable(PetAction action, const PetState& state) const {
+bool PetActionMenu::isActionAvailable(PetAction action, const PetState& state) {
   if (!state.isAlive()) return false;
 
   switch (action) {
@@ -75,7 +75,7 @@ const char* PetActionMenu::actionLabel(PetAction action) {
 
 // ---- Rendering ----------------------------------------------------------
 
-void PetActionMenu::render(GfxRenderer& renderer, const PetState& state, int x, int y, int w, int h) const {
+void PetActionMenu::render(const GfxRenderer& renderer, const PetState& state, int x, int y, int w, int h) const {
   const int lh = renderer.getLineHeight(SMALL_FONT_ID);
   const int rowH = lh + 6;
   const int visibleRows = h / rowH;

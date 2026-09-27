@@ -53,25 +53,6 @@ const char* PetSpriteRenderer::moodName(PetMood mood) {
   }
 }
 
-char PetSpriteRenderer::stageInitial(PetStage stage) {
-  switch (stage) {
-    case PetStage::EGG:
-      return 'E';
-    case PetStage::HATCHLING:
-      return 'H';
-    case PetStage::YOUNGSTER:
-      return 'Y';
-    case PetStage::COMPANION:
-      return 'C';
-    case PetStage::ELDER:
-      return 'A';
-    case PetStage::DEAD:
-      return 'X';
-    default:
-      return '?';
-  }
-}
-
 // ---- File loading -------------------------------------------------------
 
 size_t PetSpriteRenderer::loadSprite(const char* path, size_t expectedBytes) {
@@ -82,8 +63,8 @@ size_t PetSpriteRenderer::loadSprite(const char* path, size_t expectedBytes) {
 
 // ---- Fallback renderer (pixel-art from PetSpriteData.h) -----------------
 
-void PetSpriteRenderer::drawFallback(GfxRenderer& renderer, int x, int y, int scale, PetStage stage, uint8_t variant,
-                                     uint8_t petType, uint8_t animFrame) {
+void PetSpriteRenderer::drawFallback(const GfxRenderer& renderer, int x, int y, int scale, PetStage stage,
+                                     uint8_t variant, uint8_t petType, uint8_t animFrame) {
   // 24x24 grid; each logical pixel = (2*scale) physical pixels
   const int cell = 2 * scale;
   const uint32_t* rows = getSpriteRows(stage, variant, petType, animFrame);

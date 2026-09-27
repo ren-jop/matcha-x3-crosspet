@@ -18,4 +18,4 @@ enum class PetAnimIcon : uint8_t {
 };
 
 // Draws small 16x16 pixel-art action feedback icons
-void drawPetActionIcon(GfxRenderer& renderer, PetAnimIcon icon, int x, int y);
+void drawPetActionIcon(const GfxRenderer& renderer, PetAnimIcon icon, int x, int y);

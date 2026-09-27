@@ -84,9 +84,9 @@ class PetManager {
 
   // Internal helpers
   void updateStreak();
-  bool isTimeValid() const;
-  uint32_t getCurrentTime() const;
-  uint16_t getDayOfYear() const;
+  static bool isTimeValid();
+  static uint32_t getCurrentTime();
+  static uint16_t getDayOfYear();
 
   static uint8_t clampSub(uint8_t val, uint8_t amount);
   static uint8_t clampAdd(uint8_t val, uint8_t amount);

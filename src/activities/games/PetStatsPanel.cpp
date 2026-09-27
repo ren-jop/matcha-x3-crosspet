@@ -6,7 +6,7 @@
 
 // ---- Status icons -------------------------------------------------------
 
-void PetStatsPanel::renderStatusIcons(GfxRenderer& renderer, const PetState& state, int x, int y, int w) const {
+void PetStatsPanel::renderStatusIcons(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) {
   // Draw small text indicators for active conditions, spaced horizontally.
   // E-ink limitation: no real icons, use text symbols.
   const int lh = renderer.getLineHeight(SMALL_FONT_ID);
@@ -30,7 +30,7 @@ void PetStatsPanel::renderStatusIcons(GfxRenderer& renderer, const PetState& sta
 
 // ---- Stat bars ----------------------------------------------------------
 
-void PetStatsPanel::drawStatBar(GfxRenderer& renderer, int x, int y, int barW, const char* label, uint8_t value) const {
+void PetStatsPanel::drawStatBar(const GfxRenderer& renderer, int x, int y, int barW, const char* label, uint8_t value) {
   constexpr int BAR_H = 10;
   const int lh = renderer.getLineHeight(SMALL_FONT_ID);
   const int lblW = renderer.getTextWidth(SMALL_FONT_ID, label);
@@ -48,7 +48,7 @@ void PetStatsPanel::drawStatBar(GfxRenderer& renderer, int x, int y, int barW, c
   }
 }
 
-void PetStatsPanel::renderStats(GfxRenderer& renderer, const PetState& state, int x, int y, int w) const {
+void PetStatsPanel::renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) const {
   const int barSpacing = renderer.getLineHeight(SMALL_FONT_ID) + 10;
 
   drawStatBar(renderer, x, y, w, tr(STR_PET_HUNGER), state.hunger);

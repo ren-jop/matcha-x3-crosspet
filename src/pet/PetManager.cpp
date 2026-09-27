@@ -287,15 +287,15 @@ PetManager::Milestone PetManager::consumePendingMilestone() {
 
 // --- Helpers ---
 
-bool PetManager::isTimeValid() const {
+bool PetManager::isTimeValid() {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo, 0)) return false;
   return timeinfo.tm_year >= 125;
 }
 
-uint32_t PetManager::getCurrentTime() const { return static_cast<uint32_t>(time(nullptr)); }
+uint32_t PetManager::getCurrentTime() { return static_cast<uint32_t>(time(nullptr)); }
 
-uint16_t PetManager::getDayOfYear() const {
+uint16_t PetManager::getDayOfYear() {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo, 0)) return 0;
   if (timeinfo.tm_year < 125) return 0;

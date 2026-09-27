@@ -1,6 +1,6 @@
 #include "PetAnimationIcons.h"
 
-void drawPetActionIcon(GfxRenderer& renderer, PetAnimIcon icon, int x, int y) {
+void drawPetActionIcon(const GfxRenderer& renderer, PetAnimIcon icon, int x, int y) {
   switch (icon) {
     case PetAnimIcon::HEART: {
       renderer.fillRect(x + 2, y, 4, 2);

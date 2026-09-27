@@ -134,7 +134,7 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 | --- | --- |
 | X3 | `x3-firmware.bin` after verification |
 
-Automatic firmware updates have not been retargeted to this fork. Use the verified X3 release asset when available.
+Automatic update checks target this fork's X3 releases. They will find an update only after a verified release is published.
 
 **2. Install dictionaries.** Word lookup needs at least a vocabulary dictionary.
 

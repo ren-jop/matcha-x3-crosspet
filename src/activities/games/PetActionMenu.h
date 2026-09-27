@@ -30,10 +30,10 @@ class PetActionMenu {
   PetAction getSelected() const;
 
   // Returns true if the action is usable given current pet state
-  bool isActionAvailable(PetAction action, const PetState& state) const;
+  static bool isActionAvailable(PetAction action, const PetState& state);
 
   // Render the action list at (x, y) within (w x h) pixels
-  void render(GfxRenderer& renderer, const PetState& state, int x, int y, int w, int h) const;
+  void render(const GfxRenderer& renderer, const PetState& state, int x, int y, int w, int h) const;
 
   // Label string for a given action
   static const char* actionLabel(PetAction action);

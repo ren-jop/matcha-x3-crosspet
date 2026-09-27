@@ -10,11 +10,11 @@
 class PetStatsPanel {
  public:
   // Draw row of status icons below the pet sprite (x/y = top-left, w = available width)
-  void renderStatusIcons(GfxRenderer& renderer, const PetState& state, int x, int y, int w) const;
+  static void renderStatusIcons(const GfxRenderer& renderer, const PetState& state, int x, int y, int w);
 
   // Draw 5 stat bars + care-mistakes counter
-  void renderStats(GfxRenderer& renderer, const PetState& state, int x, int y, int w) const;
+  void renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) const;
 
  private:
-  void drawStatBar(GfxRenderer& renderer, int x, int y, int barW, const char* label, uint8_t value) const;
+  static void drawStatBar(const GfxRenderer& renderer, int x, int y, int barW, const char* label, uint8_t value);
 };
