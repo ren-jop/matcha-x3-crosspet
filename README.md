@@ -165,14 +165,13 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 
 > No Python needed. [**Matcha Reader Tools**](https://eszter007.github.io/matcha-reader-tools/) converts dictionaries, fonts and manga in your browser and hands back a zip laid out for the card. Files stay on your machine, except manga OCR, where panels go to Gemini under your own key. ([source](https://github.com/eszter007/matcha-reader-tools))
 
-**1. Flash the firmware.** Download `x3-firmware.bin` from this fork's [X3 preview release](https://github.com/ren-jop/matcha-x3-crosspet/releases/tag/v1.6.0). If your X3 already runs Matcha, copy the `.bin` to the SD card, open **Settings → SD Card Firmware Update**, and select that file. The updater validates the board before installing it. For an initial USB flash, follow the [upstream X3 flashing instructions](https://github.com/crosspoint-reader/crosspoint-reader). Back up the SD card and keep a copy of your current firmware. This preview passes automated checks but has not been tested on a physical X3 yet.
+**1. Flash the firmware.** Download `x3-firmware.bin` from this fork's [X3 v1.6.5 preview release](https://github.com/ren-jop/matcha-x3-crosspet/releases/tag/v1.6.5). If your X3 already runs Matcha, copy the `.bin` to the SD card, open **Settings → SD Card Firmware Update**, and select that file. The updater validates the board before installing it. For an initial USB flash, follow the [upstream X3 flashing instructions](https://github.com/crosspoint-reader/crosspoint-reader). Back up the SD card and keep a copy of your current firmware. The source passes automated CI checks, but the release binary has not been tested on a physical X3. Check the release workflow and asset checksum before flashing.
 
 | Device | Asset |
 | --- | --- |
 | X3 | `x3-firmware.bin` preview |
 
-Automatic update checks target this fork's X3 releases. They will find an update only after a verified release is published.
-The linked v1.6.0 binary predates the newer source changes on `develop`; only flash an asset from a release whose build status you have checked.
+Automatic update checks target this fork's X3 releases; GitHub prereleases do not appear in the stable `releases/latest` feed, so install this preview manually from the SD card. The older v1.6.0 asset is superseded by v1.6.5.
 
 **2. Install dictionaries.** Word lookup needs at least a vocabulary dictionary.
 
