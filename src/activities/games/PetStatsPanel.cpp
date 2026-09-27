@@ -48,7 +48,7 @@ void PetStatsPanel::drawStatBar(const GfxRenderer& renderer, int x, int y, int b
   }
 }
 
-void PetStatsPanel::renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) const {
+void PetStatsPanel::renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) {
   const int barSpacing = renderer.getLineHeight(SMALL_FONT_ID) + 10;
 
   drawStatBar(renderer, x, y, w, tr(STR_PET_HUNGER), state.hunger);

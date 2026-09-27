@@ -80,7 +80,7 @@ void PetSpriteRenderer::drawFallback(const GfxRenderer& renderer, int x, int y, 
 
 // ---- Public API ---------------------------------------------------------
 
-void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood, int scale,
+void PetSpriteRenderer::drawPet(const GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood, int scale,
                                 uint8_t variant, uint8_t petType, uint8_t animFrame) {
   char path[80];
   // SD card sprites are 48x48 binary — only used at scale==1, no animFrame
@@ -100,8 +100,8 @@ void PetSpriteRenderer::drawPet(GfxRenderer& renderer, int x, int y, PetStage st
   }
 }
 
-void PetSpriteRenderer::drawMini(GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood, uint8_t variant,
-                                 uint8_t petType) {
+void PetSpriteRenderer::drawMini(const GfxRenderer& renderer, int x, int y, PetStage stage, PetMood mood,
+                                 uint8_t variant, uint8_t petType) {
   char path[88];
   // Try variant-specific mini file first
   if (variant > 0) {

@@ -13,7 +13,7 @@ class PetStatsPanel {
   static void renderStatusIcons(const GfxRenderer& renderer, const PetState& state, int x, int y, int w);
 
   // Draw 5 stat bars + care-mistakes counter
-  void renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w) const;
+  static void renderStats(const GfxRenderer& renderer, const PetState& state, int x, int y, int w);
 
  private:
   static void drawStatBar(const GfxRenderer& renderer, int x, int y, int barW, const char* label, uint8_t value);
