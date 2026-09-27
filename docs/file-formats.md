@@ -90,6 +90,19 @@ if (parsedSize != fileSize) {
 
 ## `section.bin`
 
+### Version 94 (fork numbering)
+
+Carries upstream's v45 to v48. Internal EPUB links keep CSS superscript and
+subscript positioning; ordered lists number their items and
+`list-style-type: none` suppresses markers; the section header gains signed
+`characterSpacing` (pixels) and unsigned `wordSpacingPercent`, both part of cache
+validation, with each TextBlock's BlockStyle storing only `characterSpacing`; and
+Hangul no longer has implicit break opportunities between syllables — Korean
+wraps at spaces, justification stretches word spaces only, and with hyphenation
+enabled a word may split where the CJK line-breaking rules allow, without an
+inserted hyphen. The header grew and line breaking moved, so v93 caches neither
+parse nor match.
+
 ### Version 92 (fork numbering)
 
 Each file in `sections/*.bin` stores one laid-out spine section. The header is
@@ -252,7 +265,7 @@ import std.mem;
 import std.string;
 import std.core;
 
-#define EXPECTED_VERSION 81
+#define EXPECTED_VERSION 94
 #define MAX_STRING_LENGTH 65535
 #define FOOTNOTE_NUMBER_LEN 32
 #define FOOTNOTE_HREF_LEN 256
@@ -309,6 +322,7 @@ struct BlockStyle {
     bool textIndentDefined;
     bool isRtl;
     bool directionDefined;
+    s8 characterSpacing;
 };
 
 struct TextBlock {
@@ -415,6 +429,8 @@ struct SectionBin {
     bool embeddedStyle;
     u8 imageRendering;
     bool focusReadingEnabled;
+    s8 characterSpacing;
+    u8 wordSpacingPercent;
 
     u16 pageCount;
     u32 pageLutOffset;
@@ -527,6 +543,7 @@ modification time (when the file landed on the card); `firstSeen` — the
 build-assigned discovery counter — breaks ties and carries books whose
 filesystem reports no time. Fold version 3 introduced the timestamp key; a
 fold bump rebuilds ranks while preserving `firstSeen`.
+Fold version 4 preserves leading articles in title sort and search keys.
 
 Sections are 512-byte aligned so each starts on an SD block boundary.
 
@@ -536,7 +553,7 @@ A fixed stride is what lets the reader seek straight to record *n* without an
 offset table, and read a screenful in one 4 KB block. `static_assert` enforces it.
 
 Each record carries `fold[96]`, the title normalised for search and sorting —
-accents stripped, case dropped, leading articles removed — and `authorKey[12]`,
+accents stripped, case dropped, leading articles preserved — and `authorKey[12]`,
 the author's words folded and sorted so that "Victor Hugo" and "Hugo Victor" group as
 one person. `authorKey` is a GROUPING key, not an ordering one: the shelf orders by
 surname, derived separately from the display name.
