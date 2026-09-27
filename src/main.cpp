@@ -914,12 +914,12 @@ void loop() {
   activityManager.loop();
   const unsigned long activityDuration = millis() - activityStartTime;
 
-  // Send one durable mine when Wi-Fi is already connected. Network retries
-  // stay off the reader and USB storage paths.
+  // Schedule one durable mine when Wi-Fi is connected. HTTP runs in a separate
+  // low-priority task so a missing desktop companion never stalls home input.
   static unsigned long lastAnkiPump = 0;
   if (!activityManager.isReaderActivity() && millis() - lastAnkiPump >= 15000) {
     lastAnkiPump = millis();
-    AnkiMineQueue::pump();
+    AnkiMineQueue::pumpAsync();
   }
 
   const unsigned long loopDuration = millis() - loopStartTime;

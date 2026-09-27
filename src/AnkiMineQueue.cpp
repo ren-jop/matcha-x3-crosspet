@@ -7,15 +7,31 @@
 #include <Logging.h>
 #include <WiFi.h>
 
+#include <atomic>
 #include <cstring>
 
 namespace {
 constexpr char kDirectory[] = "/AnkiOutbox";
 constexpr char kConfigPath[] = "/anki-wifi.json";
 constexpr size_t kMaxPayload = 4096;
+std::atomic<bool> pumpRunning{false};
 
 bool validText(const char* text, size_t limit) { return text && strnlen(text, limit + 1) <= limit; }
+
+void pumpTask(void*) {
+  AnkiMineQueue::pump();
+  pumpRunning.store(false, std::memory_order_release);
+  vTaskDelete(nullptr);
+}
 }  // namespace
+
+void AnkiMineQueue::pumpAsync() {
+  if (WiFi.status() != WL_CONNECTED || pumpRunning.exchange(true, std::memory_order_acq_rel)) return;
+  if (xTaskCreate(pumpTask, "AnkiMine", 6144, nullptr, 1, nullptr) != pdPASS) {
+    pumpRunning.store(false, std::memory_order_release);
+    LOG_ERR("ANKI", "Unable to start Wi-Fi mine sender");
+  }
+}
 
 bool AnkiMineQueue::enqueue(const char* expression, const char* reading, const char* meaning) {
   if (!validText(expression, 240) || !validText(reading, 240) || !validText(meaning, 3000) || !*expression)
@@ -38,8 +54,8 @@ bool AnkiMineQueue::enqueue(const char* expression, const char* reading, const c
 }
 
 void AnkiMineQueue::pump() {
-  if (WiFi.status() != WL_CONNECTED || !Storage.exists(kConfigPath)) return;
-  // Bound the work to one note per tick, off the reader path. Failed requests
+  if (WiFi.status() != WL_CONNECTED || !Storage.ready() || !Storage.exists(kConfigPath)) return;
+  // Bound the work to one note per attempt. Failed requests
   // leave the same file and ID in place for an idempotent retry.
   const auto files = Storage.listFiles(kDirectory, 1);
   if (files.empty()) return;

@@ -5,5 +5,7 @@
 class AnkiMineQueue {
  public:
   static bool enqueue(const char* expression, const char* reading, const char* meaning);
+  // Starts at most one low-priority network attempt without blocking button input.
+  static void pumpAsync();
   static void pump();
 };
