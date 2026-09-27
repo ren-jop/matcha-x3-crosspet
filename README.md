@@ -120,7 +120,7 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 - Instant image page turns, since the next image decodes in the background
 - Next-book suggestions at the end of EPUB, TXT/Markdown, XTC and manga books
 - A file browser that shows everything on the card, with unsupported files greyed out rather than hidden
-- Fully localised, in all the languages CrossPoint ships
+- Existing Matcha language support; new pet labels fall back to English where untranslated
 
 ---
 
@@ -128,11 +128,11 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 
 > No Python needed. [**Matcha Reader Tools**](https://eszter007.github.io/matcha-reader-tools/) converts dictionaries, fonts and manga in your browser and hands back a zip laid out for the card. Files stay on your machine, except manga OCR, where panels go to Gemini under your own key. ([source](https://github.com/eszter007/matcha-reader-tools))
 
-**1. Flash the firmware** with the standard CrossPoint process, see the [upstream docs](https://github.com/crosspoint-reader/crosspoint-reader). Use only a verified `x3-firmware.bin` from this fork's [releases](https://github.com/ren-jop/matcha-x3-crosspet/releases). No release is available until the port builds and has been checked on an X3.
+**1. Flash the firmware.** Download `x3-firmware.bin` from this fork's [X3 preview release](https://github.com/ren-jop/matcha-x3-crosspet/releases/tag/v1.6.0). If your X3 already runs Matcha, copy the `.bin` to the SD card, open **Settings → SD Card Firmware Update**, and select that file. The updater validates the board before installing it. For an initial USB flash, follow the [upstream X3 flashing instructions](https://github.com/crosspoint-reader/crosspoint-reader). Back up the SD card and keep a copy of your current firmware. This preview passes automated checks but has not been tested on a physical X3 yet.
 
 | Device | Asset |
 | --- | --- |
-| X3 | `x3-firmware.bin` after verification |
+| X3 | `x3-firmware.bin` preview |
 
 Automatic update checks target this fork's X3 releases. They will find an update only after a verified release is published.
 
