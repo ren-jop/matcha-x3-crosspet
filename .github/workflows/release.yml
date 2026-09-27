@@ -1,8 +1,6 @@
 name: Compile Release
 
-# Builds every board's release firmware, with the .bin named exactly as OtaUpdater
-# requests it from the GitHub release: <board>-firmware.bin, and x4old-x3-firmware.bin
-# for the combined C3 X4/X3 image.
+# Builds the X3 firmware asset named exactly as OtaUpdater requests it.
 #
 # A bare tag push builds and leaves the results as workflow artifacts. Publishing a
 # release additionally ATTACHES those .bin files to it, which is what makes OTA work:
@@ -15,6 +13,12 @@ on:
       - '*'
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to build and attach
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -27,7 +31,7 @@ jobs:
     # prerelease builds the `_rc` variant (LOG_LEVEL=1, RC hash in the version) rather than the
     # release one. Derived from pio_env so a renamed env cannot leave one step behind.
     env:
-      PIO_ENV: ${{ github.event.release.prerelease && format('{0}_rc', matrix.pio_env) || matrix.pio_env }}
+      PIO_ENV: ${{ (github.event.release.prerelease || github.event_name == 'workflow_dispatch') && format('{0}_rc', matrix.pio_env) || matrix.pio_env }}
     strategy:
       fail-fast: false
       matrix:
@@ -44,7 +48,7 @@ jobs:
           # A release event carries the tag in the payload; a bare tag push has no payload, so
           # fall back to ref_name, which IS the tag there. Without the fallback this compares an
           # empty string and every tag-push build fails before it starts.
-          RELEASE_TAG: ${{ github.event.release.tag_name || github.ref_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
         run: |
           # The tag must name the version the tagged commit actually carries. Upstream compares a
           # prerelease against "<version>rc"; this fork tags prereleases with their full version
@@ -121,9 +125,8 @@ jobs:
             .pio/build/${{ env.PIO_ENV }}/partitions.bin
 
   publish-release:
-    # Only a published release has somewhere to attach to. On a bare tag push this is
-    # skipped and the artifacts remain available for a manual upload.
-    if: github.event_name == 'release'
+    # Manual runs target an existing release; tag pushes only leave artifacts.
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     needs: [build-release, language-packs]
     runs-on: ubuntu-latest
     permissions:
@@ -137,7 +140,7 @@ jobs:
       - name: Attach firmware to the release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
         run: |
           set -euo pipefail
           for asset in x3-firmware.bin; do
