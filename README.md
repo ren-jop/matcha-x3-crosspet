@@ -1,8 +1,8 @@
-# Matcha Reader, a Japanese learning fork of CrossPoint
+# Matcha X3: reading, CrossPet games, and Anki bridge
 
-A fork of [CrossPoint](https://github.com/crosspoint-reader/crosspoint-reader) e-reader firmware for ESP32 devices (XTEINK X4, X3, X4C, X4-Pro, Papermono, Sticky), built for reading Japanese. Vertical text, instant dictionary lookup with verb deinflection, a manga panel reader where you can look up words right in the speech bubbles, and page translation, all on e-ink.
+This is an **Xteink X3-only** fork of [Matcha Reader](https://github.com/eszter007/matcha-reader), built for reading Japanese. It retains vertical text, dictionary lookup, manga and reading stats, and brings CrossPet's five games to an X3 build. The [companion bridge](https://github.com/ren-jop/matcha-ttu-bridge) handles ッツ import experiments and the computer-side Anki inbox.
 
-It includes all features of upstream CrossPoint and runs on any supported ESP32 device. You can try it first in the [simulator](https://github.com/eszter007/crosspoint-simulator-ios) — no device needed — on your desktop or as an iPhone app.
+The firmware build selects the X3 profile directly, including both supported X3 display controller variants. Other devices are outside this fork's release scope. **Do not flash a development artifact until its X3 build and hardware checks pass.** The CrossPet pet and device-side Anki sender are still being integrated.
 
 <p align="center">
   <img src="docs/images/screenshots/vertical-text.png" width="200" alt="Vertical Japanese text">
@@ -16,6 +16,10 @@ Full instructions live in the [User Guide](USER_GUIDE.md). This page is the shor
 ---
 
 ## Features
+
+### X3 home and games
+
+The home screen keeps the existing cover and quick menu redraw behavior. **Reading & Play** opens Insights and CrossPet's 2048, Sudoku, Minesweeper, Caro (five in a row), and Chess. The 2048 best score persists on the SD card. Navigation remains on the X3 buttons, and Japanese labels are included for the new screens. The virtual pet and direct Wi-Fi upload of dictionary mines are not in this build yet.
 
 ### Vertical Japanese text
 
@@ -122,17 +126,13 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 
 > No Python needed. [**Matcha Reader Tools**](https://eszter007.github.io/matcha-reader-tools/) converts dictionaries, fonts and manga in your browser and hands back a zip laid out for the card. Files stay on your machine, except manga OCR, where panels go to Gemini under your own key. ([source](https://github.com/eszter007/matcha-reader-tools))
 
-**1. Flash the firmware** with the standard CrossPoint process, see the [upstream docs](https://github.com/crosspoint-reader/crosspoint-reader). Take the build for your device from [this repository's releases](https://github.com/eszter007/matcha-reader/releases) — not upstream's:
+**1. Flash the firmware** with the standard CrossPoint process, see the [upstream docs](https://github.com/crosspoint-reader/crosspoint-reader). Use only a verified `x3-firmware.bin` from this fork's [releases](https://github.com/ren-jop/matcha-x3-crosspet/releases). No release is available until the port builds and has been checked on an X3.
 
 | Device | Asset |
 | --- | --- |
-| X3, and X4 (old) | `x4old-x3-firmware.bin` |
-| X4C (new) | `x4c-firmware.bin` |
-| X4 Pro | `x4pro-firmware.bin` |
-| Sticky | `sticky-firmware.bin` |
-| Papermono | `papermono-firmware.bin` |
+| X3 | `x3-firmware.bin` after verification |
 
-Once flashed, **Settings → Update** checks this repository's releases and downloads the asset matching your device, so an update keeps the Matcha features rather than replacing them with stock CrossPoint. Pre-releases (nightlies) are never offered over the air — install those by flashing.
+Automatic firmware updates have not been retargeted to this fork. Use the verified X3 release asset when available.
 
 **2. Install dictionaries.** Word lookup needs at least a vocabulary dictionary.
 
@@ -223,8 +223,8 @@ The output is a folder of images, panel crops and three small index files. Drop 
 ## Building from source
 
 ```bash
-git clone --recursive https://github.com/eszter007/matcha-reader.git
-cd matcha-reader
+git clone --recursive https://github.com/ren-jop/matcha-x3-crosspet.git
+cd matcha-x3-crosspet
 git submodule update --init --recursive   # if you cloned without --recursive
 pio run              # build
 pio run -t upload    # flash

@@ -115,8 +115,14 @@ HalGPIO::DeviceType detectDeviceTypeWithFingerprint() {
 
 void HalGPIO::begin() {
 #if FREEINK_MCU_C3
+#if FREEINK_DEVICE_X3 && !FREEINK_DEVICE_X4
+  // A dedicated X3 binary must ignore stale X4 override/cache values in NVS.
+  _deviceType = DeviceType::X3;
+  BoardConfig::selectDevice(BoardConfig::Board::XteinkX3);
+#else
   _deviceType = detectDeviceTypeWithFingerprint();
   BoardConfig::selectDevice(deviceIsX3() ? BoardConfig::Board::XteinkX3 : BoardConfig::Board::XteinkX4);
+#endif
 
   // Resolve the per-batch controller before SPI owns the display pins. FreeInk
   // checks the OEM hw_calib/screenType value first, then falls back to its

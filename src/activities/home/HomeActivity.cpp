@@ -13,8 +13,8 @@
 #include <Xtc.h>
 
 #include <algorithm>
+#include <array>
 #include <cstring>
-#include <vector>
 
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
@@ -27,7 +27,7 @@
 #include "fontIds.h"
 
 int HomeActivity::getMenuItemCount() const {
-  int count = 5;  // Library, Browse Files, File Transfer, Insights, Settings
+  int count = 5;  // Library, Browse Files, File Transfer, Reading & Play, Settings
   if (!recentBooks.empty()) {
     count += recentBooks.size();
   }
@@ -322,8 +322,8 @@ void HomeActivity::loop() {
       case HomeMenuItem::FILE_TRANSFER:
         onFileTransferOpen();
         break;
-      case HomeMenuItem::READING_STATS:
-        onStatsOpen();
+      case HomeMenuItem::GAMES:
+        onGamesOpen();
         break;
       case HomeMenuItem::SETTINGS_MENU:
         onSettingsOpen();
@@ -408,21 +408,22 @@ void HomeActivity::render(RenderLock&&) {
   const auto pageWidth = renderer.getScreenWidth();
   const auto pageHeight = renderer.getScreenHeight();
 
-  // Build menu items dynamically (both render paths need the same model)
-  std::vector<const char*> menuItems = {tr(STR_MENU_RECENT_BOOKS), tr(STR_BROWSE_FILES), tr(STR_FILE_TRANSFER),
-                                        tr(STR_STATS), tr(STR_SETTINGS_TITLE)};
-  std::vector<UIIcon> menuIcons = {Library, Folder, Transfer, Stats, Settings};
-
-  if (hasOpdsServers) {
-    menuItems.insert(menuItems.begin() + 2, tr(STR_OPDS_BROWSER));
-    menuIcons.insert(menuIcons.begin() + 2, Library);
-  }
-
-  if (metrics.homeContinueReadingInMenu && !recentBooks.empty()) {
-    // Insert Continue Reading at the top if enabled in theme
-    menuItems.insert(menuItems.begin(), tr(STR_CONTINUE_READING));
-    menuIcons.insert(menuIcons.begin(), Book);
-  }
+  // Home is the most frequent menu render. Fixed storage avoids two vector
+  // allocations on every selection move, including the partial redraw path.
+  std::array<const char*, 7> menuItems{};
+  std::array<UIIcon, 7> menuIcons{};
+  int menuItemCount = 0;
+  auto addItem = [&](const char* label, UIIcon icon) {
+    menuItems[menuItemCount] = label;
+    menuIcons[menuItemCount++] = icon;
+  };
+  if (metrics.homeContinueReadingInMenu && !recentBooks.empty()) addItem(tr(STR_CONTINUE_READING), Book);
+  addItem(tr(STR_MENU_RECENT_BOOKS), Library);
+  addItem(tr(STR_BROWSE_FILES), Folder);
+  if (hasOpdsServers) addItem(tr(STR_OPDS_BROWSER), Library);
+  addItem(tr(STR_FILE_TRANSFER), Transfer);
+  addItem(tr(STR_GAMES), Blocks);
+  addItem(tr(STR_SETTINGS_TITLE), Settings);
 
   const int menuTop = metrics.homeTopPadding + metrics.homeCoverTileHeight + metrics.homeMenuTopOffset;
   const Rect menuRect{0, menuTop, pageWidth, pageHeight - menuTop - metrics.buttonHintsHeight};
@@ -438,7 +439,7 @@ void HomeActivity::render(RenderLock&&) {
       lastSelectorIndex >= menuStart) {
     renderer.fillRect(menuRect.x, menuRect.y, menuRect.width, menuRect.height, false);
     GUI.drawButtonMenu(
-        renderer, menuRect, static_cast<int>(menuItems.size()), menuSelected,
+        renderer, menuRect, menuItemCount, menuSelected,
         [&menuItems](int index) { return std::string(menuItems[index]); },
         [&menuIcons](int index) { return menuIcons[index]; });
     lastSelectorIndex = selectorIndex;
@@ -479,7 +480,7 @@ void HomeActivity::render(RenderLock&&) {
                           std::bind(&HomeActivity::storeCoverBuffer, this), currentBookProgress);
 
   GUI.drawButtonMenu(
-      renderer, menuRect, static_cast<int>(menuItems.size()), menuSelected,
+      renderer, menuRect, menuItemCount, menuSelected,
       [&menuItems](int index) { return std::string(menuItems[index]); },
       [&menuIcons](int index) { return menuIcons[index]; });
 
@@ -509,6 +510,6 @@ void HomeActivity::onSettingsOpen() { activityManager.goToSettings(); }
 
 void HomeActivity::onFileTransferOpen() { activityManager.goToFileTransfer(); }
 
-void HomeActivity::onStatsOpen() { activityManager.goToReadingStats(); }
+void HomeActivity::onGamesOpen() { activityManager.goToGames(); }
 
 void HomeActivity::onOpdsBrowserOpen() { activityManager.goToBrowser(); }

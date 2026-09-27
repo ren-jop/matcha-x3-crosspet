@@ -340,6 +340,7 @@ class GfxRenderer {
   void fillRoundedRect(int x, int y, int width, int height, int cornerRadius, bool roundTopLeft, bool roundTopRight,
                        bool roundBottomLeft, bool roundBottomRight, Color color) const;
   void drawImage(const uint8_t bitmap[], int x, int y, int width, int height) const;
+  void drawImageTransparent(const uint8_t bitmap[], int x, int y, int width, int height) const;
   // allowUpscale: by default the image only shrinks to fit maxWidth x maxHeight (covers and sleep
   // screens rely on this); pass true to also grow a source smaller than the box up to fill it
   // (manga panel zoom). Only wired through the 1-bit path -- the grayscale path always shrink-fits.
