@@ -8,8 +8,12 @@ The firmware build selects the X3 profile directly, including both supported X3 
   <img src="docs/images/screenshots/vertical-text.png" width="200" alt="Vertical Japanese text">
   <img src="docs/images/screenshots/word-lookup.png" width="200" alt="Dictionary word lookup panel">
   <img src="docs/images/screenshots/manga-full-page.png" width="200" alt="Manga reader, full page">
-  <img src="docs/images/screenshots/language-stats.png" width="200" alt="Reading stats split by language">
+  <img src="docs/images/screenshots/insights.png" width="200" alt="Reading stats, split by language across the tabs">
 </p>
+
+### Supported device
+
+- **Xteink X3**, including its supported display controller variants. This fork builds and releases the X3 firmware only.
 
 Full instructions live in the [User Guide](USER_GUIDE.md). This page is the short version.
 
@@ -83,21 +87,54 @@ Convert with the [browser tool](https://eszter007.github.io/matcha-reader-tools/
 Every book on the card as a cover grid, at any depth. Covers and titles come from the book's own metadata on first
 visit, with progress as a badge. Manga sits beside EPUBs. A **Shelves** tab lists folders that contain books.
 
-<p align="center"><img src="docs/images/screenshots/library.png" width="260" alt="Library grid with manga and EPUB covers side by side"></p>
+<p align="center"><img src="docs/images/screenshots/library.png" width="260" alt="Library grid with manga and EPUB covers side by side, under the Books / Shelves / Files tabs"></p>
 
 CrossPoint's own library screen is still here if you prefer it: an indexed list with title and author search across
 thousands of books, sorted by title, author or when they were added. **Settings → Display → Library** gathers the library
 settings on one screen, starting with the view switch: **Matcha Covers** (the default) or **CrossPoint List**.
 
+### Cover Grid home, with tabs
+
+The **Cover Grid** theme (the default on touch devices; **Settings → Display → UI Theme** elsewhere) puts a tab bar along
+the bottom that stays put as you move between Home, Library, File Transfer, Insights and Settings. The tab you are in is
+drawn filled. Nothing opens "on top" any more, so there is no stack to back out of.
+
+On a button-only device the bar is part of one navigation ring rather than a separate thing to reach: **Up/Down** walk a
+screen's own tabs, then its rows, then the bottom bar; **Confirm** steps the tabs at the top and past the last one drops
+into the bar; **Left/Right** move along the bar, and **Confirm** on the tab you are already in hands the cursor back to
+the top. A grey outline marks whatever the cursor is on. Details in
+[§3.1.1](USER_GUIDE.md#311-tabs-and-button-navigation-cover-grid-theme).
+
+Covers are built in the background, so the grid appears at once with titles standing in for artwork the device has not
+made yet and each cover replaces its own title as it finishes. A button press interrupts the work instead of queueing
+behind it.
+
+<p align="center">
+  <img src="docs/images/screenshots/tab-home.png" width="150" alt="Home tab: the cover grid">
+  <img src="docs/images/screenshots/library.png" width="150" alt="Library tab, with Books, Shelves and Files">
+  <img src="docs/images/screenshots/tab-transfer.png" width="150" alt="File Transfer tab">
+  <img src="docs/images/screenshots/insights.png" width="150" alt="Insights tab, with a tab per language">
+  <img src="docs/images/screenshots/tab-settings.png" width="150" alt="Settings tab">
+</p>
+
+The SD browser lives inside the Library there, as a third tab beside **Books** and **Shelves**. On the other themes it
+stays its own entry on the home menu.
+
+Long press a cover, on the home grid, in the Library or inside a shelf, for **View Stats**, **Mark as Read** /
+**Mark as Unread** and **Delete**. On button-only devices, hold **Confirm** on the selected cover. Only the direction that changes something is offered: a finished book has no "Mark as Read". Delete asks
+first, and takes the book's reading cache with it.
+
+Swipe down from the top edge for the control centre: brightness and warmth, then round buttons for dark mode, a screen
+refresh, orientation, touch controls and the light. Each button names what tapping it does rather than reporting a state.
+
 ### Reading stats
 
 Streak, minutes this week, books finished, total time, and a calendar of the days you read. Recorded as you go, every few minutes and again when you close a book, so a flat battery costs you minutes rather than the whole session.
 
-Press **Details** for the same numbers per language, one tab each. Long press a book in the Library for its own sessions, total time, average session and calendar.
+Tabs across the top split the same numbers by language: **All**, then one per language the device has seen. Long press a book in the Library for its own sessions, total time, average session and calendar.
 
 <p align="center">
   <img src="docs/images/screenshots/insights.png" width="240" alt="Insights with streak, stat cards and calendar">
-  <img src="docs/images/screenshots/language-stats.png" width="240" alt="Per-language stats with a tab for each language">
   <img src="docs/images/screenshots/book-stats.png" width="240" alt="Per-book stats for one book">
 </p>
 
@@ -135,6 +172,7 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 | X3 | `x3-firmware.bin` preview |
 
 Automatic update checks target this fork's X3 releases. They will find an update only after a verified release is published.
+The linked v1.6.0 binary predates the newer source changes on `develop`; only flash an asset from a release whose build status you have checked.
 
 **2. Install dictionaries.** Word lookup needs at least a vocabulary dictionary.
 

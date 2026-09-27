@@ -19,6 +19,7 @@ Welcome to the **CrossPoint** firmware. This guide outlines the hardware control
     - [First Launch](#first-launch)
   - [3. Screens](#3-screens)
     - [3.1 Home Screen](#31-home-screen)
+      - [3.1.1 Tabs and Button Navigation (Cover Grid theme)](#311-tabs-and-button-navigation-cover-grid-theme)
     - [3.2 Reading Mode](#32-reading-mode)
     - [3.3 Browse Files Screen](#33-browse-files-screen)
     - [3.4 Library Screen](#34-library-screen)
@@ -66,9 +67,8 @@ Welcome to the **CrossPoint** firmware. This guide outlines the hardware control
     - [6.5 Dictionary Files and Language Selection](#65-dictionary-files-and-language-selection)
   - [7. Reading Stats](#7-reading-stats)
     - [7.1 Insights](#71-insights)
-    - [7.2 Per-language Stats](#72-per-language-stats)
-    - [7.3 Per-book Stats](#73-per-book-stats)
-    - [7.4 What the Numbers Do Not Cover](#74-what-the-numbers-do-not-cover)
+    - [7.2 Per-book Stats](#72-per-book-stats)
+    - [7.3 What the Numbers Do Not Cover](#73-what-the-numbers-do-not-cover)
   - [8. Current Limitations & Roadmap](#8-current-limitations--roadmap)
   - [9. Troubleshooting Issues & Escaping Bootloop](#9-troubleshooting-issues--escaping-bootloop)
 
@@ -130,6 +130,38 @@ Upon turning the device on for the first time, you will be placed on the **[Home
 
 The Home screen is the main entry point to the firmware. From here you can navigate to **[Reading Mode](#4-reading-mode)** with the most recently read book, **[Browse Files](#33-browse-files-screen)**, the **[Library](#34-library-screen)**, **[File Transfer](#35-file-transfer-screen)**, or **[Settings](#36-settings)**.
 
+In the **Cover Grid** theme the Home screen is a grid of covers instead of a menu: the book you are reading fills a card
+across the top and the rest follow below it. Covers are made in the background the first time the device sees a book, so
+the grid appears straight away with titles in place of the artwork it has not built yet, and each cover replaces its own
+title as it finishes. Nothing blocks while this happens, and a button press stops the conversion rather than waiting for
+it. A cover that could not be built is retried the next time you visit Home.
+
+Long press a cover, here, in the Library or inside a shelf, for **View Stats**, **Mark as Read** / **Mark as Unread**
+and **Delete**. Without a touch panel, select the cover and hold **Confirm** for a second; letting go leaves the menu
+open.
+Only the direction that changes something is offered, so a finished book has no **Mark as Read**. Delete asks first and
+takes the book's reading cache with it.
+
+#### 3.1.1 Tabs and Button Navigation (Cover Grid theme)
+
+The Cover Grid theme carries a tab bar along the bottom of Home, Library, File Transfer, Insights and Settings. It stays
+put as you move between them, and the tab you are in is drawn filled. Nothing opens on top of anything else, so there is
+no stack to back out of.
+
+On a touch device, tap a tab. On a button-only device the bar is part of one navigation ring, so every control on the
+screen is reachable without leaving it:
+
+- **Up / Side Up** and **Down / Side Down** walk the ring: the screen's own tabs at the top (where it has them), then its
+  rows or covers, then the bottom bar, and round again.
+- **Confirm** on a screen's own tabs steps to the next one — **Books**, **Shelves**, **Files** in the Library, the
+  categories in Settings, the languages in Insights — and past the last one it moves the cursor into the bottom bar.
+- **Left** and **Right**, once the cursor is in the bottom bar, move between Home, Library, File Transfer, Insights and
+  Settings. **Confirm** goes to the highlighted tab; **Confirm** on the tab you are already in hands the cursor back to
+  the top of the screen, closing the ring.
+- **Back** still leaves the screen, and holding it still goes Home.
+
+A grey outline marks whatever the cursor is on, whether that is a cover, a row or a tab.
+
 ### 3.2 Reading Mode
 
 See [Reading Mode](#4-reading-mode) below for more information.
@@ -142,6 +174,11 @@ The Browse Files screen acts as a file and folder browser. The full path to the 
 * **Open Selection:** Press **Confirm** to open a folder or start reading a selected book. Selecting a `.bmp` file will open the image viewer.
 * **Delete Files or Folders:** Hold and release **Confirm** to delete the selected file or folder. You will be given an option to either confirm or cancel. Multiple files can be selected for deletion in a single operation. Deleting a folder removes everything inside it.
 * **Rename or Move:** Files can be renamed or moved to a different folder from within the browse screen.
+
+In the **Cover Grid** theme this screen is the Library's **Files** tab rather than its own entry on the home menu, so it
+keeps the **Books / Shelves / Files** tabs at the top and the bottom tab bar. The back arrow in the header appears only
+once you are inside a folder; at the card root the tabs are the way out. Every other theme keeps **Browse Files** as a
+separate home entry, exactly as before.
 
 ### 3.4 Library Screen
 
@@ -238,7 +275,7 @@ open a list when selected.
 #### 3.6.1 Display
 
 - **Library**: Opens the library settings, gathered on one screen:
-  
+
   - **Library View**: Which screen the Library entry opens — "Matcha Covers" (default), the cover grid, or
     "CrossPoint List", the indexed title/author list described in [Library Screen](#34-library-screen)
   - **Rebuild library index**: Re-scan the card to pick up file changes and updated metadata
@@ -246,7 +283,7 @@ open a list when selected.
   - **Move finished books to Read**: Move a finished book into a `Read` folder
   - **Use book metadata**: Read the title and author stored inside each book when the index is rebuilt.
     When disabled or unavailable, the filename is used
-  
+
   Three of those only affect the CrossPoint List screen and are hidden while Matcha Covers is
   selected, leaving Library View and Move finished books to Read: the index rebuild and the
   metadata toggle both feed the list's index, which the cover grid does not use, and the cover
@@ -258,7 +295,7 @@ open a list when selected.
   below.
 
 - **Sleep Screen**: Which sleep screen to display when the device sleeps:
-  
+
   - "Dark" (default) - The default dark Crosspoint logo sleep screen
   - "Light" - The same default sleep screen, on a white background
   - "Custom" - Custom images from the SD card; see [Sleep Screen](#37-sleep-screen) below for more information
@@ -268,12 +305,12 @@ open a list when selected.
   - "Quick resume" - The text of the last page read will be displayed on the sleep screen and a moon icon is shown on the edge of the screen. Waking up the device will return to the same page of the opened book. This is useful for quickly resuming reading without waiting for the device to fully wake up and load the book.
   - "Transparent" - A transparent overlay image drawn over the current screen; see [Sleep Screen](#37-sleep-screen) below for more information
 - **Sleep Screen Cover Mode**: How to display the book cover when "Cover" sleep screen is selected:
-  
+
   - "Fit" (default) - Scale the image down to fit centered on the screen, padding with white borders as necessary
   - "Crop" - Scale the image down and crop as necessary to try to fill the screen (Note: this is experimental and may not work as expected)
 
 - **Sleep Screen Cover Filter**: What filter will be applied to the book cover when "Cover" sleep screen is selected:
-  
+
   - "None" (default) - The cover image will be converted to a grayscale image and displayed as it is
   - "Contrast" - The image will be displayed as a black & white image without grayscale conversion
   - "Inverted" - The image will be inverted as in white & black and will be displayed without grayscale conversion
@@ -283,7 +320,7 @@ open a list when selected.
 - **Time to Sleep**: Set the duration of inactivity before the device automatically goes to sleep; options are 1, 3, 5, 10 (default), 15 or 30 minutes.
 
 - **Status Bar**: Configure the status bar displayed while reading:
-  
+
   - "None" - No status bar
   - "No Progress" - Show status bar without reading progress
   - "Full w/ Percentage" - Show status bar with book progress (as percentage)
@@ -292,7 +329,7 @@ open a list when selected.
   - "Full w/ Chapter Bar" - Show status bar with chapter progress (as bar)
 
 - **Hide Battery %**: Configure where to suppress the battery percentage display in the status bar; the battery icon will still be shown:
-  
+
   - "Never" (default) - Always show battery percentage
   - "In Reader" - Show battery percentage everywhere except in reading mode
   - "Always" - Always hide battery percentage
@@ -300,28 +337,26 @@ open a list when selected.
 - **Refresh Frequency**: Set how often the screen does a full refresh while reading to reduce ghosting; options are every 1, 5, 10, 15, or 30 pages.
 
 - **UI Theme**: Set which UI theme to use:
-  
+
   - "Classic" - The original Crosspoint theme
   - "Lyra" - The new theme for Crosspoint featuring rounded elements and menu icons
   - "Lyra Extended" - Lyra, but displays 3 books instead of 1 on the **[Home Screen](#31-home-screen)**
   - "RoundedRaff" - A rounded theme with additional visual styling
 
 - **Sunlight Fading Fix**: Configure whether to enable a software-fix for the issue where white X4 models may fade when used in direct sunlight:
-  
+
   - "OFF" (default) - Disable the fix
   - "ON" - Enable the fix
-
-> [!NOTE]
-> A battery charging indicator is shown on the battery icon whenever the device is actively charging.
 
 #### 3.6.2 Reader
 
 - **Reader Font Family**: Choose the font used for reading:
-  
+
   - "Noto Serif" (default) - Google's serif font
   - "Noto Sans" - Google's sans-serif font
+  - Installed SD card families
 
-- **Reader Font Size**: Adjust the text size for reading; options are "Small", "Medium" (default), "Large", or "X Large".
+- **Reader Font Size**: Choose a point size. Built-in and direct TTF/OTF/TTC fonts offer 12, 14, 16, and 18 pt. A `.cpfont` family offers the sizes installed for that family.
 
 - **Reader Line Spacing**: Adjust the spacing between lines; options are "Tight", "Normal" (default), or "Wide".
 
@@ -333,17 +368,17 @@ open a list when selected.
 
 - **Embedded Style**: Whether to use the EPUB file's embedded HTML and CSS stylisation and formatting; options are "ON" or "OFF".
 
-- **Hyphenation**: Whether to hyphenate text in Reading Mode; options are "ON" or "OFF".
+- **Hyphenation**: Whether to hyphenate text in Reading Mode; options are "ON" or "OFF". Korean text wraps only at spaces when "OFF"; when "ON", a Korean word may also wrap at the end of a line between syllables or where it meets digits, Latin letters, or brackets (no hyphen is drawn).
 
 - **Reading Orientation**: Set the screen orientation for reading EPUB files:
-  
+
   - "Portrait" (default) - Standard portrait orientation
   - "Landscape CW" - Landscape, rotated clockwise
   - "Inverted" - Portrait, upside down
   - "Landscape CCW" - Landscape, rotated counter-clockwise
 
 - **Extra Paragraph Spacing**: Set how to handle paragraph breaks:
-  
+
   - "ON" - Vertical space will be added between paragraphs in Reading Mode
   - "OFF" - Paragraphs will not have vertical space added, but will have first-line indentation
 
@@ -403,7 +438,7 @@ open a list when selected.
   **Long-Press Button Behavior** stay visible, since they also govern the front buttons, touch and tilt.
 
 - **Long-Press Button Behavior**: Set whether long-pressing page turn buttons skips to the next/previous chapter:
-  
+
   - "Chapter Skip" (default) - Long-pressing skips to next/previous chapter
   - "Page Scroll" - Long-pressing scrolls a page up/down
 - **Long-press Menu**: Selects the function bound to holding the menu button (Confirm) while reading an EPUB. **Cycles through the available functions** each time the setting is selected — additional functions may be added in future releases, so this is not a binary on/off toggle. A short press of Confirm always opens the reader menu as normal:
@@ -413,7 +448,7 @@ open a list when selected.
   - "Disabled" - Long-press is ignored; only short-press opens the reader menu.
 
 - **Short Power Button Click**: Controls the effect of a short click of the power button:
-  
+
   - "Ignore" (default) - Require a long press to turn off the device
   - "Sleep" - A short press puts the device into sleep mode
   - "Next Page" - A short press in reading mode turns to the next page; a long press turns the device off
@@ -424,7 +459,7 @@ open a list when selected.
   - "Confirm" - A short press acts as the Confirm button. It earns its place on touch devices, which have no front Confirm key.
 
 - **Touch Reader Controls**: How the touchscreen turns pages while reading (touch devices only):
-  
+
   - "Off" - The reading surface ignores touch entirely
   - "Tap" (default) - Tap the left third to go back, the right third to go forward
   - "Swipe" - Swipe horizontally to turn pages, leaving taps free for the reader menu
@@ -469,11 +504,11 @@ CrossPoint supports saving multiple OPDS servers and switching between them when
 2. Select **Add Server** to create a new entry, or select an existing server to edit it.
 
 3. Configure these fields:
-   
+
    - **Server Name**: Optional display name (for example, "Home Calibre" or "Public Catalog").
-   
+
    - **OPDS Server URL**: Full catalog root URL (for Calibre Content Server, usually ends with `/opds`).
-   
+
    - **Username / Password**: Optional credentials for authenticated servers.
 
 4. Use **Delete Server** inside a server entry to remove it.
@@ -618,13 +653,13 @@ curl -i "http://<server-ip>:17200/users/create" \
 If this returns `HTTP 402` with `{"code":2002,"message":"Username is already registered."}`, the account already exists.
 
 4. On each CrossPoint device:
-   
+
    - Go to **Settings -> System -> KOReader Sync**.
-   
+
    - Set **Username** and **Password** (enter the plain password; CrossPoint computes MD5 internally, and use the same values on all devices).
-   
+
    - Set **Sync Server URL** to `http://<server-ip>:17200`.
-   
+
    - Run **Authenticate**.
 
 If you use the HTTPS listener, use `https://<server-ip>:7200` (`curl -k` only for self-signed certificate testing).
@@ -697,7 +732,7 @@ Artwork along one edge, as below, keeps most of the page readable.
 
 ### 3.8 Custom Fonts (SD Card)
 
-CrossPoint supports loading additional fonts from the SD card, extending beyond the two built-in families (Noto Serif, Noto Sans). Custom fonts can include extended Unicode coverage, enabling CJK (Chinese, Japanese, Korean) and other scripts.
+CrossPoint loads additional fonts from the SD card. Custom fonts can add Chinese, Japanese, Korean, and other scripts that the built-in reader fonts lack. If your device have external RAM, you can copy `.ttf`, `.otf`, and `.ttc` files directly. Otherwise, use `.cpfont` files made from those fonts.
 
 Convert any TTF or OTF with [Matcha Reader Tools](https://eszter007.github.io/matcha-reader-tools/) and put the
 result in `.fonts/<Family>/regular.cpfont`.
@@ -705,8 +740,8 @@ result in `.fonts/<Family>/regular.cpfont`.
 There are three ways to install fonts:
 
 1. **Download from device (recommended):** Go to **Settings -> System -> Manage Fonts**, browse the available font families, and select one to download over Wi-Fi.
-2. **Upload via web interface:** While in **File Transfer** mode, open the web UI in a browser and navigate to the **Fonts** tab to upload `.cpfont` files.
-3. **Manual SD card copy:** Download font files from the [crosspoint-fonts repository](https://github.com/crosspoint-reader/crosspoint-fonts) and copy them to `/.fonts/` (preferred) or `/fonts/` on your SD card.
+2. **Upload via web interface:** While in **File Transfer** mode, open the web UI and use the **Fonts** tab to upload `.cpfont` files. The Fonts tab does not accept TTF/OTF/TTC files.
+3. **Manual SD card copy:** Copy `.cpfont` families from the [crosspoint-fonts repository](https://github.com/crosspoint-reader/crosspoint-fonts) to `/.fonts/` or `/fonts/`. If your device have external RAM, you can also copy TTF/OTF/TTC files there without conversion.
 
 Once installed, custom fonts appear in **Settings → Reader → Font Family** alongside the built-in fonts.
 
@@ -1039,28 +1074,26 @@ crash costs you the last few minutes rather than the whole session. Manga counts
 Home → **Insights**. Your current streak, minutes this week, books finished, days read, total time, longest
 streak, and a calendar of the days you read.
 
-| Button | Action |
-| --- | --- |
-| Left / Right | Previous or next month. The button hints name the month they move to. |
-| Up / Down | Scroll |
-| Confirm | Open the per-language view |
-| Back | Back one screen. Hold it to go home. |
-
-<p align="center"><img src="docs/images/screenshots/insights.png" width="260" alt="Insights with streak, stat cards and calendar"></p>
-
-### 7.2 Per-language Stats
-
-Press **Details** on Insights. The same figures again, split by the language of what you read, with one tab per
-language and **Switch** to move between them. Each tab has its own streak, calendar and totals, so a Japanese
-streak survives an evening spent with an English book.
+A row of tabs across the top splits the same figures by the language of what you read. **All** is everything
+together; after it comes one tab per language the device has seen. Each tab keeps its own streak, calendar and
+totals, so a Japanese streak survives an evening spent with an English book.
 
 Tabs are named where the firmware has a translation for the language, so `ja` shows as 日本語. A language it has
 no translation for keeps its tag, `ZH` for instance, rather than being given the wrong name. Books that declare no
-language at all, which means TXT, XTC and manga converted without `--language`, collect in an **Unknown** tab.
+language at all — TXT, XTC and manga converted without `--language` — collect in an **Unknown** tab.
 
-<p align="center"><img src="docs/images/screenshots/language-stats.png" width="260" alt="Per-language stats with a tab for each language"></p>
+| Button | Action |
+| --- | --- |
+| Confirm | Next tab. Past the last one the cursor moves into the bottom tab bar (Cover Grid theme). |
+| Left / Right | Previous or next month, while the cursor is on the page. The button hints name the month they move to. |
+| Up / Down | Scroll. Down past the end of the page moves the cursor into the bottom tab bar. |
+| Back | Back one screen. Hold it to go home. |
 
-### 7.3 Per-book Stats
+On a touch device, tap a tab, or flick left and right across the page to step through them.
+
+<p align="center"><img src="docs/images/screenshots/insights.png" width="260" alt="Insights with streak, stat cards and calendar"></p>
+
+### 7.2 Per-book Stats
 
 Long press a book in the Library. Sessions, total time, average session, days read, and a calendar of the days you
 read that book.
@@ -1074,7 +1107,7 @@ recorded yet" until you next open it. Your overall Insights numbers go back as f
 
 <p align="center"><img src="docs/images/screenshots/book-stats.png" width="260" alt="Per-book stats for one book"></p>
 
-### 7.4 What the Numbers Do Not Cover
+### 7.3 What the Numbers Do Not Cover
 
 Worth knowing before you read too much into them.
 
@@ -1091,7 +1124,7 @@ Please note that this firmware is currently in active development. The following
 
 * **Cover Images:** Large cover images embedded into EPUB require several seconds (~10s for ~2000 pixel tall image) to convert for sleep screen and home screen thumbnail. Consider optimizing the EPUB with e.g. https://github.com/bigbag/epub-to-xtc-converter to speed this up.
 * **Unsupported Image Formats:** Most JPG and PNG images in EPUBs render correctly. GIFs are not supported and fall back to an `[Image]` placeholder. Progressive JPEGs do render, but only their DC coefficients are decoded — a preview at one-eighth resolution, scaled back up, so fine detail is lost. The one variant that is refused outright is a progressive JPEG that both splits its DC coefficients across one scan per component *and* uses chroma subsampling; re-encode those as baseline (`jpegtran -copy none -optimize`, or run the page through the manga converter).
-* 
+*
 * **Dictionary Lookup:** Inline word lookup is not yet implemented.
 
 ---
