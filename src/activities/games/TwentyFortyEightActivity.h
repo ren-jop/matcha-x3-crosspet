@@ -12,7 +12,7 @@ class TwentyFortyEightActivity final : public Activity {
   static constexpr int TILE = 108;  // px per tile
   static constexpr int GAP = 8;     // px between tiles
 
-  uint32_t grid[SIZE][SIZE];  // 0 = empty
+  uint32_t grid[SIZE][SIZE]{};  // 0 = empty
   uint32_t score = 0;
   bool gameOver = false;
   bool won = false;  // reached 2048 tile (can continue playing)

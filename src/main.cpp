@@ -23,6 +23,7 @@
 
 #include <cstring>
 
+#include "AnkiMineQueue.h"
 #include "CrossPointSettings.h"
 #include "CrossPointState.h"
 #include "KOReaderCredentialStore.h"
@@ -38,6 +39,7 @@
 #include "components/UITheme.h"
 #include "fontIds.h"
 #include "images/LoadingIcon.h"
+#include "pet/PetManager.h"
 #include "platform/UsbSerialJtagHandoff.h"
 #include "util/ButtonNavigator.h"
 #include "util/ScreenshotUtil.h"
@@ -484,6 +486,9 @@ void setup() {
     return;
   }
 
+  PET_MANAGER.load();
+  PET_MANAGER.tick();
+
   HalSystem::checkPanic();
 
   APP_STATE.loadFromFile();
@@ -694,6 +699,11 @@ void setup() {
 }
 
 void loop() {
+  static unsigned long lastPetTick = 0;
+  if (millis() - lastPetTick >= 60000) {
+    lastPetTick = millis();
+    PET_MANAGER.tick();
+  }
   static unsigned long maxLoopDuration = 0;
   const unsigned long loopStartTime = millis();
   static unsigned long lastMemPrint = 0;
@@ -903,6 +913,14 @@ void loop() {
   const unsigned long activityStartTime = millis();
   activityManager.loop();
   const unsigned long activityDuration = millis() - activityStartTime;
+
+  // Send one durable mine when Wi-Fi is already connected. Network retries
+  // stay off the reader and USB storage paths.
+  static unsigned long lastAnkiPump = 0;
+  if (!activityManager.isReaderActivity() && millis() - lastAnkiPump >= 15000) {
+    lastAnkiPump = millis();
+    AnkiMineQueue::pump();
+  }
 
   const unsigned long loopDuration = millis() - loopStartTime;
   if (loopDuration > maxLoopDuration) {

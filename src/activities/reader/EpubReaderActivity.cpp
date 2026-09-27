@@ -59,6 +59,7 @@
 #include "activities/settings/TextSettingsActivity.h"
 #include "components/UITheme.h"
 #include "fontIds.h"
+#include "pet/PetManager.h"
 #include "util/BookmarkUtil.h"
 #include "util/ButtonNavigator.h"
 #include "util/DictionaryRegistry.h"
@@ -423,6 +424,7 @@ void EpubReaderActivity::onReaderExit() {
     READING_STATS_STORE.loadFromFile();
     READING_STATS_STORE.markBookFinished(epub->getPath());
     READING_STATS_STORE.saveToFile();
+    PET_MANAGER.onBookFinished();
   }
 
   // Leaving mid-footnote loses the in-RAM return stack on deep sleep; persist the
@@ -434,6 +436,7 @@ void EpubReaderActivity::onReaderExit() {
 
   section.reset();
   verticalSection.reset();
+  if (PET_MANAGER.exists()) PET_MANAGER.save();
 
   // Per-book reader prefs: pin the current reading settings to this book, then
   // restore the global defaults. Settings edited while reading (via the pushed
@@ -1769,6 +1772,7 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
         verticalSection->currentPage++;
       else if (section)
         section->currentPage++;
+      PET_MANAGER.onPageTurn();
     } else {
       // We don't want to delete the section mid-render, so grab the semaphore
       {
@@ -1778,6 +1782,7 @@ void EpubReaderActivity::pageTurn(bool isForwardTurn) {
         section.reset();
         verticalSection.reset();
       }
+      if (epub && currentSpineIndex <= epub->getSpineItemsCount()) PET_MANAGER.onPageTurn();
     }
   } else {
     if (curPage > 0) {

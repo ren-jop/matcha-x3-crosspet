@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "AnkiMineQueue.h"
 #include "CrossPointSettings.h"
 #include "DefinitionTextRenderer.h"
 #include "Epub/Page.h"
@@ -1515,6 +1516,14 @@ bool EpubReaderWordLookupActivity::handleDefinitionInput() {
     return false;
   }
 
+  if (mappedInput.wasLongPressed(MappedInputManager::Button::Confirm, 900)) {
+    if (hasResult) {
+      mineQueued = AnkiMineQueue::enqueue(visibleHeadword(), visibleReading(), visibleDefinition().c_str());
+      mineFailed = !mineQueued;
+      requestUpdate();
+    }
+    return false;
+  }
   if (mappedInput.wasReleased(MappedInputManager::Button::Confirm)) {
     performLookup();
     return false;
@@ -1965,8 +1974,9 @@ void EpubReaderWordLookupActivity::render(RenderLock&&) {
   // Directional labels, not mapLabels: the hint has to name the direction the button moves the
   // selection ON THE ROTATED SCREEN. mapLabels only ever flipped a fixed left/right pair, so in
   // landscape the front buttons still read "Left"/"Right" while actually moving up and down.
-  const auto labels = mappedInput.mapDirectionalLabels(tr(STR_BACK), tr(STR_SELECT), tr(STR_DIR_LEFT),
-                                                       tr(STR_DIR_RIGHT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
+  const auto labels = mappedInput.mapDirectionalLabels(
+      tr(STR_BACK), mineQueued ? tr(STR_ANKI_QUEUED) : (mineFailed ? tr(STR_ANKI_ERROR) : tr(STR_ANKI_HOLD_MINE)),
+      tr(STR_DIR_LEFT), tr(STR_DIR_RIGHT), tr(STR_DIR_UP), tr(STR_DIR_DOWN));
   DictionaryPanel::clearButtonHints(renderer);
   GUI.drawButtonHints(renderer, labels.btn1, labels.btn2, labels.btn3, labels.btn4);
 

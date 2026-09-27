@@ -1,8 +1,8 @@
 # Matcha X3: reading, CrossPet games, and Anki bridge
 
-This is an **Xteink X3-only** fork of [Matcha Reader](https://github.com/eszter007/matcha-reader), built for reading Japanese. It retains vertical text, dictionary lookup, manga and reading stats, and brings CrossPet's five games to an X3 build. The [companion bridge](https://github.com/ren-jop/matcha-ttu-bridge) handles ッツ import experiments and the computer-side Anki inbox.
+This is an **Xteink X3-only** fork of [Matcha Reader](https://github.com/eszter007/matcha-reader), built for reading Japanese. It retains vertical text, dictionary lookup, manga and reading stats, and brings CrossPet's virtual pet and five games to an X3 build. The [companion bridge](https://github.com/ren-jop/matcha-ttu-bridge) handles ッツ import experiments and the computer-side Anki inbox.
 
-The firmware build selects the X3 profile directly, including both supported X3 display controller variants. Other devices are outside this fork's release scope. **Do not flash a development artifact until its X3 build and hardware checks pass.** The CrossPet pet and device-side Anki sender are still being integrated.
+The firmware build selects the X3 profile directly, including both supported X3 display controller variants. Other devices are outside this fork's release scope. **Do not flash a development artifact until its X3 build and hardware checks pass.** The current build has not yet been tested on physical X3 hardware.
 
 <p align="center">
   <img src="docs/images/screenshots/vertical-text.png" width="200" alt="Vertical Japanese text">
@@ -19,7 +19,7 @@ Full instructions live in the [User Guide](USER_GUIDE.md). This page is the shor
 
 ### X3 home and games
 
-The home screen keeps the existing cover and quick menu redraw behavior. **Reading & Play** opens Insights and CrossPet's 2048, Sudoku, Minesweeper, Caro (five in a row), and Chess. The 2048 best score persists on the SD card. Navigation remains on the X3 buttons, and Japanese labels are included for the new screens. The virtual pet and direct Wi-Fi upload of dictionary mines are not in this build yet.
+The home screen keeps the book cover and quick menu redraw. **Reading & Play** opens a compact reading dashboard, CrossPet’s virtual pet, and 2048, Sudoku, Minesweeper, Caro (five in a row), and Chess. The pet is fed by forward reading and saved to SD; a built-in pixel sprite appears even without external sprite files. The 2048 best score persists on the SD card. X3 buttons navigate every screen; Japanese labels cover the menu and game screens.
 
 ### Vertical Japanese text
 
@@ -48,6 +48,8 @@ Vocabulary, names and grammar each come from their own dictionary. If the book i
 Other languages get the same treatment from their StarDict dictionaries. A word at the start of a sentence keeps its accents and still resolves (`École` finds `école`), and French adds its own rules: `l'eau` looks up `eau`, `journaux` finds `journal`, `heureuse` finds `heureux`, and the regular conjugations resolve to the infinitive (`parlaient` → `parler`, `mangeons` → `manger`, `finissent` → `finir`). The same coverage extends to `-eindre`/`-aindre`/`-oindre` verbs (`éteignit` finds `éteindre`, `craignait` finds `craindre`), `-aître` verbs (`connaissons` finds `connaître`), `-uire` verbs (`conduisit` finds `conduire`), and adverbs formed from an adjective (`lentement` finds `lent`). English and everything else fall back to plurals and verb endings. Irregular verbs that share no stem with their infinitive — and a verb's irregular passé simple, like `connus` or `naquit` — need a `.syn` file in the dictionary folder — see [docs/dictionary.md](docs/dictionary.md).
 
 In French books, a literary verb-subject inversion like `songeai-je` or `pense-t-il` splits into two selectable words (`songeai`/`je`, `pense`/`il`), so both the verb and the pronoun look up on their own. A genuine compound like `rendez-vous` or `grand-mère` still selects as one word.
+
+Hold Confirm for about one second in the definition panel to queue the word, reading and definition for Anki. The mine is saved on SD first, then sent to the trusted LAN companion when Wi-Fi is connected. Add `/anki-wifi.json` to the SD card with `{"url":"http://YOUR_MAC_LAN_IP:8766/v1/mines","token":"YOUR_RANDOM_TOKEN"}`; see the [companion setup](https://github.com/ren-jop/matcha-ttu-bridge#x3-wi-fi--anki-inbox). The companion maps fields to an existing Anki model and syncs through Anki Desktop to AnkiMobile.
 
 Reader Settings includes **Word Lookup Font Size** (Tiny, Small, Medium or Large) for adjusting dictionary entry text.
 

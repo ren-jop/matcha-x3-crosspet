@@ -16,8 +16,8 @@ class MinesweeperActivity final : public Activity {
   enum class CellState : uint8_t { HIDDEN, REVEALED, FLAGGED };
 
   // Each cell: adjacent mine count (0-8) or 9 = mine
-  uint8_t grid[ROWS][COLS];
-  CellState state[ROWS][COLS];
+  uint8_t grid[ROWS][COLS]{};
+  CellState state[ROWS][COLS]{};
 
   int cursorRow = 0;
   int cursorCol = 0;

@@ -25,7 +25,7 @@ class ChessActivity final : public Activity {
   Difficulty difficulty = Difficulty::EASY;
   bool showingDifficultySelect = true;  // pre-game difficulty selection screen
 
-  int8_t board[BOARD][BOARD];  // [row][col], row 0 = top (black side)
+  int8_t board[BOARD][BOARD]{};  // [row][col], row 0 = top (black side)
   int cursorRow = 0;
   int cursorCol = 0;
   int selRow = -1, selCol = -1;  // selected piece (-1 = none)

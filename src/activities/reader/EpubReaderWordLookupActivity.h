@@ -142,6 +142,8 @@ class EpubReaderWordLookupActivity final : public Activity {
   // The reader opens the panel on a long press, so the Confirm release that follows belongs to
   // that press, not to a selection. Ignore it until a fresh press is seen.
   bool confirmPressSeen = false;
+  bool mineQueued = false;
+  bool mineFailed = false;
 
   // The touch long press that opened the panel, replayed here as if it were a tap in select
   // mode. Held rather than applied once, because the page is segmented progressively: the point

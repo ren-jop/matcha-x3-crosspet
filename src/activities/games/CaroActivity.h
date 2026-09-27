@@ -11,7 +11,7 @@ class CaroActivity final : public Activity {
   static constexpr int SIZE = 15;
   static constexpr int CELL = 28;
 
-  uint8_t grid[SIZE][SIZE];  // 0=empty, 1=X(human), 2=O(AI)
+  uint8_t grid[SIZE][SIZE]{};  // 0=empty, 1=X(human), 2=O(AI)
   int cursorRow = 0;
   int cursorCol = 0;
   bool gameOver = false;
