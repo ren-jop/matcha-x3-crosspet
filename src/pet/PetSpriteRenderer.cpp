@@ -64,9 +64,9 @@ size_t PetSpriteRenderer::loadSprite(const char* path, size_t expectedBytes) {
 // ---- Fallback renderer (pixel-art from PetSpriteData.h) -----------------
 
 void PetSpriteRenderer::drawFallback(const GfxRenderer& renderer, int x, int y, int scale, PetStage stage,
-                                     uint8_t variant, uint8_t petType, uint8_t animFrame) {
-  // 24x24 grid; each logical pixel = (2*scale) physical pixels
-  const int cell = 2 * scale;
+                                     uint8_t variant, uint8_t petType, uint8_t animFrame, bool mini) {
+  // The built-in art is a 24x24 grid. Mini icons use one physical pixel per cell.
+  const int cell = mini ? 1 : 2 * scale;
   const uint32_t* rows = getSpriteRows(stage, variant, petType, animFrame);
   for (int row = 0; row < 24; row++) {
     uint32_t mask = rows[row];
@@ -117,6 +117,6 @@ void PetSpriteRenderer::drawMini(const GfxRenderer& renderer, int x, int y, PetS
   if (loadSprite(path, MINI_BYTES) == MINI_BYTES) {
     renderer.drawImage(spriteBuffer, x, y, MINI_W, MINI_H);
   } else {
-    drawFallback(renderer, x, y, /*scale=*/1, stage, variant, petType, /*animFrame=*/0);
+    drawFallback(renderer, x, y, /*scale=*/1, stage, variant, petType, /*animFrame=*/0, /*mini=*/true);
   }
 }

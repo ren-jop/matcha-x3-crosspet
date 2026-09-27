@@ -45,5 +45,5 @@ class PetSpriteRenderer {
   static size_t loadSprite(const char* path, size_t expectedBytes);
 
   static void drawFallback(const GfxRenderer& renderer, int x, int y, int scale, PetStage stage, uint8_t variant = 0,
-                           uint8_t petType = 0, uint8_t animFrame = 0);
+                           uint8_t petType = 0, uint8_t animFrame = 0, bool mini = false);
 };
