@@ -49,7 +49,7 @@ Other languages get the same treatment from their StarDict dictionaries. A word 
 
 In French books, a literary verb-subject inversion like `songeai-je` or `pense-t-il` splits into two selectable words (`songeai`/`je`, `pense`/`il`), so both the verb and the pronoun look up on their own. A genuine compound like `rendez-vous` or `grand-mère` still selects as one word.
 
-Hold Confirm for about one second in the definition panel to queue the word, reading and definition for Anki. The mine is saved on SD first, then sent to the trusted LAN companion when Wi-Fi is connected. Add `/anki-wifi.json` to the SD card with `{"url":"http://YOUR_MAC_LAN_IP:8766/v1/mines","token":"YOUR_RANDOM_TOKEN"}`; see the [companion setup](https://github.com/ren-jop/matcha-ttu-bridge#x3-wi-fi--anki-inbox). The companion maps fields to an existing Anki model and syncs through Anki Desktop to AnkiMobile.
+Hold Confirm for about one second in the definition panel to save the word for Anki. See [Anki companion setup](#anki-companion-setup) for the Wi-Fi transfer and note mapping.
 
 Reader Settings includes **Word Lookup Font Size** (Tiny, Small, Medium or Large) for adjusting dictionary entry text.
 
@@ -171,6 +171,52 @@ Some folder names pair a font with an entry that is already in the list instead 
 **4. Set up translation** (optional). Get a key from [Google AI Studio](https://aistudio.google.com/apikey) and save it as `/system/gemini.key` on the card. A hidden `/.system/` folder works too.
 
 Using all of it: [§6 of the User Guide](USER_GUIDE.md#6-japanese-reading-features).
+
+---
+
+## Anki companion setup
+
+The X3 sends dictionary mines to the [Matcha ↔ ッツ companion repository](https://github.com/ren-jop/matcha-ttu-bridge), which must run on a computer on the same trusted Wi-Fi. This is a separate path from CrossPoint Sync and from the ッツ book import. The device does not talk directly to AnkiMobile or AnkiWeb.
+
+1. Install **Anki Desktop** and its **AnkiConnect** add-on on that computer. Open Anki Desktop with the collection that already contains your Prettify CSS and type-in-answer note type. In Anki, check the exact **deck name**, **note type name**, and **every field name**. The note type owns the card templates and CSS; the companion uses it instead of making a new one.
+2. In the companion repository, copy `anki-config.example.json` to `anki-config.local.json`. Set `deck` and `model` to those existing names. Put all fields of that model in `fields`. For each field, set `field_map` to `"expression"`, `"reading"`, `"meaning"`, or `null` (empty). These keys and field names must match Anki exactly. For example:
+
+   ```json
+   {
+     "deck": "Japanese",
+     "model": "My Prettify type-in-answer",
+     "fields": ["Expression", "Reading", "Meaning", "Sentence"],
+     "field_map": {
+       "Expression": "expression", "Reading": "reading",
+       "Meaning": "meaning", "Sentence": null
+     },
+     "sync_ankiweb": true
+   }
+   ```
+
+   Use your actual model and field names. The X3 sends three values: looked-up word, reading, and dictionary definition. It does not capture a sentence, screenshot, audio, or a review result. A model that requires those needs its own fallback template or a different mining path.
+3. Find the computer's **private LAN IP address** on the Wi-Fi shared with the X3. Generate a random token (24 characters minimum), keep it private, and start the companion from its repository directory. Replace `192.168.1.23` with that IP:
+
+   ```sh
+   cp anki-config.example.json anki-config.local.json
+   python3 -c 'import secrets; print(secrets.token_urlsafe(32))'
+   export MATCHA_ANKI_TOKEN='PASTE_THE_GENERATED_TOKEN_HERE'
+   python3 anki_bridge.py --config anki-config.local.json --host 192.168.1.23
+   ```
+
+   Leave this process running. The companion listens on port **8766** at that LAN address. AnkiConnect listens only on the computer's loopback address, port **8765**. Allow local Wi-Fi access to 8766 in the computer firewall; do not forward it to the internet.
+4. Put a file named `/anki-wifi.json` at the **root** of the X3 SD card, with the same IP and token:
+
+   ```json
+   {"url":"http://192.168.1.23:8766/v1/mines","token":"PASTE_THE_GENERATED_TOKEN_HERE"}
+   ```
+
+5. On the X3, open an EPUB word definition and **hold Confirm for about one second**. “Mine saved” means the JSON was written to `/AnkiOutbox` on the SD card; it does not yet mean Anki has added a note. When Wi-Fi is connected and you are outside the reader, the X3 tries one saved mine about every 15 seconds. A failed request leaves the file for a later retry. On HTTP acceptance, the X3 removes that outbox file; the companion first keeps its own durable SQLite queue and tries AnkiConnect about every 15 seconds.
+6. With Anki Desktop open, confirm the note appears in the configured deck under the **existing model**. If `sync_ankiweb` is `true`, the companion requests Anki Desktop's AnkiWeb sync after adding it. Then open **AnkiMobile and sync there** to receive the card and its existing template. If Anki Desktop was closed, opening it later lets the companion process its saved queue. The companion marks a pre-existing duplicate as `conflict` instead of overwriting it.
+
+To inspect the companion's queue, run `curl -H "Authorization: Bearer $MATCHA_ANKI_TOKEN" http://192.168.1.23:8766/v1/status` on the computer, using its actual IP. A mine still in `/AnkiOutbox` means the X3 has not received HTTP 202; check both devices' Wi-Fi, the LAN IP, running process, token, and firewall. A `queued` companion note means the Wi-Fi handoff succeeded but Anki Desktop or AnkiConnect is unavailable. A `conflict` means the configured model or duplicate rule needs attention. The token and `anki-config.local.json` are private; never commit them.
+
+Yomitan has its **own** deck, note type, and field mapping in its Anki settings. Point it at the same existing Prettify type and desired deck, then mine a test card. The X3 companion and Yomitan do not share a live mining queue. CrossPet's game progress is also separate from Anki scheduling.
 
 ---
 
