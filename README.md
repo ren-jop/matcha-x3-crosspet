@@ -163,15 +163,71 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 
 ## Setup
 
-> No Python needed. [**Matcha Reader Tools**](https://eszter007.github.io/matcha-reader-tools/) converts dictionaries, fonts and manga in your browser and hands back a zip laid out for the card. Files stay on your machine, except manga OCR, where panels go to Gemini under your own key. ([source](https://github.com/eszter007/matcha-reader-tools))
+> **First time? Start here.** You do **not** need a programmer, soldering tools, or a second microcontroller. For a normal USB-unlocked X3, the only hardware needed to install the firmware is the **Xteink X3 + a computer + a USB-C cable that supports data**. A microSD card is not required for the initial USB flash, but it is strongly recommended (and needed for books, dictionaries, CrossPet saves, Anki outbox files, and the easiest future firmware updates).
+>
+> **Browser note:** the CrossPoint web flasher uses WebSerial. Use a Chromium-based browser such as Chrome or Edge for the flashing step. Firefox/Floorp and Safari do not provide the required WebSerial connection.
+>
+> **USB-locked X3 warning:** some X3 units bought from third-party marketplaces ship with USB flashing locked. Do **not** use the Xteink Unlocker to install this custom build directly. The CrossPoint project warns that the unlocker officially supports CrossPoint and CrossInk only, and using another firmware on a locked device can leave it without a recovery path. If yours is locked, use the unlocker only for the officially supported CrossPoint path first, then install this build from CrossPoint/Matcha using the SD-card updater.
 
-**1. Flash the firmware.** Download `x3-firmware.bin` from this fork's [X3 v1.6.5 preview release](https://github.com/ren-jop/matcha-x3-crosspet/releases/tag/v1.6.5). If your X3 already runs Matcha, copy the `.bin` to the SD card, open **Settings → SD Card Firmware Update**, and select that file. The updater validates the board before installing it. For an initial USB flash, follow the [upstream X3 flashing instructions](https://github.com/crosspoint-reader/crosspoint-reader). Back up the SD card and keep a copy of your current firmware. The source passes automated CI checks, but the release binary has not been tested on a physical X3. Check the release workflow and asset checksum before flashing.
+### Flashing the X3 firmware
+
+Download **`x3-firmware.bin`** from the [X3 v1.6.5 preview release](https://github.com/ren-jop/matcha-x3-crosspet/releases/tag/v1.6.5).
+
+#### A. X3 already running Matcha or CrossPoint — easiest method
+
+1. Back up the microSD card and keep a copy of the firmware you are currently using.
+2. Copy `x3-firmware.bin` anywhere on the X3 microSD card.
+3. On the X3, open **Settings → SD Card Firmware Update**.
+4. Select `x3-firmware.bin`.
+5. Confirm the update and let the device reboot. Do not remove power or the card while it is flashing.
+6. After rebooting, check that the library opens, the display updates normally, and **Reading & Play** is present.
+
+This is the recommended route once CrossPoint/Matcha is already on the device because it avoids USB-driver and browser-serial issues.
+
+#### B. X3 still on the original Xteink firmware — first install
+
+1. Use a **data-capable USB-C cable** and connect the awake/unlocked X3 directly to the computer.
+2. Open the [CrossPoint web flasher](https://crosspointreader.com/#flash-tools) in Chrome, Edge, or another Chromium browser.
+3. Select **X3**.
+4. Install the current official **CrossPoint** X3 firmware first. This establishes the supported CrossPoint firmware/partition path and gives you a known recovery/update route.
+5. Let the X3 reboot into CrossPoint and confirm it works.
+6. Put `x3-firmware.bin` on the microSD card and use **Settings → SD Card Firmware Update** as described in method A.
+
+You can also use the CrossPoint web flasher's **Custom .bin** option once the device is on a compatible CrossPoint layout. The SD-card method is simpler for this fork.
+
+#### C. The computer cannot see the X3
+
+Before assuming the device is locked:
+
+- make sure the USB-C cable carries **data**, not power only;
+- try another USB port;
+- make sure the X3 is awake/unlocked;
+- use Chrome/Edge rather than Firefox/Floorp/Safari;
+- disconnect hubs/docks and connect the X3 directly.
+
+If the X3 still never appears in the browser's serial-device picker, it may be one of the USB-locked third-party units. Follow the upstream [CrossPoint USB-locked-device instructions](https://github.com/crosspoint-reader/crosspoint-reader#usb-locked-devices-xteink-unlocker) and heed the warning above: use the unlocker only for its supported firmware path, **not this custom binary directly**.
+
+#### What you need
+
+| Item | Required? | Notes |
+| --- | --- | --- |
+| Xteink X3 | Yes | This fork is X3-only. |
+| Computer | Yes | macOS, Windows, or Linux is fine. |
+| USB-C data cable | Yes for first USB install | A charge-only cable will not work. |
+| Chrome/Edge/Chromium browser | Yes for web flashing | Needed because the flasher uses WebSerial. |
+| microSD card | Recommended / effectively required for normal use | Books, dictionaries, saves, Anki files and SD-card firmware updates live here. |
+| USB programmer / ESP debugger | No | Not needed for a normal working X3. |
+| Soldering tools | No | Only relevant to low-level hardware recovery of a badly bricked unit. |
+
+The source passes automated CI checks, but this fork's current preview binary has not yet been verified on physical X3 hardware. Check the release asset and checksum before flashing.
 
 | Device | Asset |
 | --- | --- |
 | X3 | `x3-firmware.bin` preview |
 
-Automatic update checks target this fork's X3 releases; GitHub prereleases do not appear in the stable `releases/latest` feed, so install this preview manually from the SD card. The older v1.6.0 asset is superseded by v1.6.5.
+Automatic update checks target this fork's X3 releases. GitHub prereleases do not appear in the stable `releases/latest` feed, so install this preview manually. The older v1.6.0 asset is superseded by v1.6.5.
+
+> No Python is needed for normal reader setup. [**Matcha Reader Tools**](https://eszter007.github.io/matcha-reader-tools/) converts dictionaries, fonts and manga in your browser and hands back a zip laid out for the card. Files stay on your machine, except manga OCR, where panels go to Gemini under your own key. ([source](https://github.com/eszter007/matcha-reader-tools))
 
 **2. Install dictionaries.** Word lookup needs at least a vocabulary dictionary.
 
