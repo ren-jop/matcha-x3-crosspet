@@ -165,7 +165,7 @@ A wallpaper laid over the page you were reading, so the book shows through inste
 
 > **First time? Start here.** You do **not** need a programmer, soldering tools, or a second microcontroller. For a normal USB-unlocked X3, the only hardware needed to install the firmware is the **Xteink X3 + a computer + a USB-C cable that supports data**. A microSD card is not required for the initial USB flash, but it is strongly recommended (and needed for books, dictionaries, CrossPet saves, Anki outbox files, and the easiest future firmware updates).
 >
-> **Browser note:** the CrossPoint web flasher uses WebSerial. Use a Chromium-based browser such as Chrome or Edge for the flashing step. Firefox/Floorp and Safari do not provide the required WebSerial connection.
+> **Browser note:** the CrossPoint web flasher uses WebSerial. Use a Chromium-based browser such as **Helium**, Chrome, or Edge for the flashing step. Helium is Chromium-based and is a good lightweight option on macOS. Firefox/Floorp and Safari do not provide the required WebSerial connection.
 >
 > **USB-locked X3 warning:** some X3 units bought from third-party marketplaces ship with USB flashing locked. Do **not** use the Xteink Unlocker to install this custom build directly. The CrossPoint project warns that the unlocker officially supports CrossPoint and CrossInk only, and using another firmware on a locked device can leave it without a recovery path. If yours is locked, use the unlocker only for the officially supported CrossPoint path first, then install this build from CrossPoint/Matcha using the SD-card updater.
 
@@ -189,7 +189,7 @@ This is the recommended route once CrossPoint/Matcha is already on the device be
 1. Use a **data-capable USB-C cable** and connect the awake/unlocked X3 directly to the computer.
 2. Open the [CrossPoint web flasher](https://crosspointreader.com/#flash-tools) in Chrome, Edge, or another Chromium browser.
 3. Select **X3**.
-4. Install the current official **CrossPoint** X3 firmware first. This establishes the supported CrossPoint firmware/partition path and gives you a known recovery/update route.
+4. Install the current official **CrossPoint** X3 firmware first. This establishes the supported CrossPoint firmware/partition path and gives you a known recovery/update route. **Helium works for this step**; allow the site to access the X3 when the serial-device picker appears.
 5. Let the X3 reboot into CrossPoint and confirm it works.
 6. Put `x3-firmware.bin` on the microSD card and use **Settings → SD Card Firmware Update** as described in method A.
 
@@ -360,6 +360,19 @@ Add `--trim-margins` for anything scanned from print. It crops the paper border 
 The output is a folder of images, panel crops and three small index files. Drop it anywhere on the card, the Library finds any folder containing `panels.idx`.
 
 ---
+
+## Upstream status and optimisation policy
+
+This fork deliberately tracks the **latest stable X3 base**, rather than blindly following every commit on CrossPoint's `develop` branch.
+
+- **Current stable base:** CrossPoint / Matcha **1.6.5**.
+- The X3 CrossPet fork has already merged the 1.6.5 integration, so it is not sitting on an older 1.5/1.6.0 firmware base.
+- Post-release upstream commits are reviewed for **X3 relevance, memory use, page rendering, SD reliability, build size and performance** before being brought across.
+- Development-only changes are not merged just because they are newer. On an ESP32-C3 e-reader, a newer `develop` snapshot can trade stability or flash/RAM headroom for features intended for other devices.
+- When the next stable CrossPoint/Matcha release lands, the preferred update path is: merge the stable release, preserve the X3-only build + CrossPet + Japanese reader + Anki changes, run CI, then publish a new X3 preview.
+- Performance work should favour measurable improvements: lower RAM/heap use, less SD I/O, faster page/index generation, fewer unnecessary redraws, smaller firmware, and no regressions in X3 display-controller support.
+
+Recent upstream `develop` work after 1.6.5 includes additional rendering fixes and build/performance cleanup. Those changes are useful candidates for the next integration, but are intentionally kept separate from the currently documented stable flashing path until they have gone through the fork's X3 checks.
 
 ## Building from source
 
